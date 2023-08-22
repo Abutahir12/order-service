@@ -11,6 +11,32 @@ authorName: 'Serverless, inc.'
 authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
 -->
 
+# Project Documentation
+
+Below are the list of APIs in the given project
+
+1. create_user
+2. list_users
+3. list_groups
+4. create_order
+5. mark_under_review
+6. order_approval
+
+Here are the end points for the above APIs:
+
+- POST - https://udy25dgsna.execute-api.ap-south-1.amazonaws.com/dev/users
+- GET - https://udy25dgsna.execute-api.ap-south-1.amazonaws.com/dev/users/list
+- GET - https://udy25dgsna.execute-api.ap-south-1.amazonaws.com/dev/approval/groups
+- POST - https://udy25dgsna.execute-api.ap-south-1.amazonaws.com/dev/orders
+- PUT - https://udy25dgsna.execute-api.ap-south-1.amazonaws.com/dev/orders/review
+- PUT - https://udy25dgsna.execute-api.ap-south-1.amazonaws.com/dev/orders
+
+You can use the data given in input to run these APIs
+
+The underlying database used is Aurora Serverless (Postgresql)
+
+You can find the database schema in the db.sql file present in db_schema folder
+
 
 # Serverless Framework AWS Python Example
 
@@ -81,28 +107,3 @@ serverless plugin install -n serverless-python-requirements
 
 Running the above will automatically add `serverless-python-requirements` to `plugins` section in your `serverless.yml` file and add it as a `devDependency` to `package.json` file. The `package.json` file will be automatically created if it doesn't exist beforehand. Now you will be able to add your dependencies to `requirements.txt` file (`Pipfile` and `pyproject.toml` is also supported but requires additional configuration) and they will be automatically injected to Lambda package during build process. For more details about the plugin's configuration, please refer to [official documentation](https://github.com/UnitedIncome/serverless-python-requirements).
 
-### Project Documentation
-
-Below are the list of APIs in the given project
-
-1. create_user
-2. list_users
-3. list_groups
-4. create_order
-5. mark_under_review
-6. order_approval
-
-Here are the end points for the above APIs:
-
-POST - https://udy25dgsna.execute-api.ap-south-1.amazonaws.com/dev/users
-GET - https://udy25dgsna.execute-api.ap-south-1.amazonaws.com/dev/users/list
-GET - https://udy25dgsna.execute-api.ap-south-1.amazonaws.com/dev/approval/groups
-POST - https://udy25dgsna.execute-api.ap-south-1.amazonaws.com/dev/orders
-PUT - https://udy25dgsna.execute-api.ap-south-1.amazonaws.com/dev/orders/review
-PUT - https://udy25dgsna.execute-api.ap-south-1.amazonaws.com/dev/orders
-
-You can use the data given in input to run these APIs
-
-The underlying database used is Aurora Serverless (Postgresql)
-
-You can find the database schema in the db.sql file present in db_schema folder
