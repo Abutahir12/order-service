@@ -1,6 +1,7 @@
 import boto3
 import json
 import os
+import uuid
 
 from dotenv import load_dotenv
 from utils.http_methods import (
@@ -26,10 +27,11 @@ def insert_user_values(
     secret_arn = SECRET_ARN
     resource_arn = RESOURCE_ARN
 
+    new_user_id = uuid.uuid4()
     # Construct the SQL statement
     sql_statement = (
-        "INSERT INTO users (username, first_name, last_name, approval_group_id) "
-        f"VALUES ('{username}', '{first_name}', '{last_name}', {approval_group_id})"
+        "INSERT INTO users (id, username, first_name, last_name, approval_group_id) "
+        f"VALUES ('{new_user_id}', '{username}', '{first_name}', '{last_name}', {approval_group_id})"
     )
 
     return rds_data.execute_statement(

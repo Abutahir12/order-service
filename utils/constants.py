@@ -1,0 +1,6 @@
+ORDER_STATUS = {
+    "INITIATED": 1,
+    "UNDER_REVIEW": 2,
+    "APPROVE":3,
+    "REJECT":4
+}

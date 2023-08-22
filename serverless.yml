@@ -65,3 +65,21 @@ functions:
           path: /approval/groups
           method: GET
           cors: true
+
+  create_order:
+    handler: orders.create_order.lambda_handler
+    events:
+      - http:
+          path: /orders
+          method: POST
+          cors: true
+          integration: lambda
+          request:
+            passThrough: WHEN_NO_MATCH
+            template:
+              application/json: '{
+                "body": $input.json("$")
+              }'
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"          

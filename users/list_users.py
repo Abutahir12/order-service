@@ -18,7 +18,7 @@ def list_users():
     secret_arn = SECRET_ARN
     resource_arn = RESOURCE_ARN
 
-    sql_statement = "select * from users;"
+    sql_statement = "select * from users order by created_at desc;"
 
     try:
         response = rds_data.execute_statement(
@@ -31,14 +31,15 @@ def list_users():
         )
 
         records = response["records"]
-        print(records)
+        
         return [
             {
-                "id": record[0]["longValue"],
-                "username": record[1]["stringValue"],
-                "first_name": record[2]["stringValue"],
-                "last_name": record[3]["stringValue"],
-                "approval_group_id": record[4]["longValue"],
+                "username": record[0]["stringValue"],
+                "first_name": record[1]["stringValue"],
+                "last_name": record[2]["stringValue"],
+                "approval_group_id": record[3]["longValue"],
+                "created_at": record[4]["stringValue"],
+                "id": record[5]["stringValue"],
             }
             for record in records
         ]
