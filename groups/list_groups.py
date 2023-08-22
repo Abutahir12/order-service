@@ -6,11 +6,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DB_NAME=os.getenv("DB_NAME")
-SECRET_ARN=os.getenv("SECRET_ARN")
-RESOURCE_ARN=os.getenv("RESOURCE_ARN")
+DB_NAME = os.getenv("DB_NAME")
+SECRET_ARN = os.getenv("SECRET_ARN")
+RESOURCE_ARN = os.getenv("RESOURCE_ARN")
 
 rds_data = boto3.client("rds-data")
+
 
 def list_approval_groups():
     # Replace these with your own RDS Data API configuration
@@ -43,5 +44,5 @@ def list_approval_groups():
 
 
 def lambda_handler(event, context):
-    response= list_approval_groups()
+    response = list_approval_groups()
     return ok_response(response)

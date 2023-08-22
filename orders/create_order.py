@@ -19,9 +19,7 @@ RESOURCE_ARN = os.getenv("RESOURCE_ARN")
 rds_data = boto3.client("rds-data")
 
 
-def insert_order_values(
-    created_by
-):
+def insert_order_values(created_by):
     # Replace these with your own RDS Data API configuration
     database = DB_NAME
     secret_arn = SECRET_ARN
@@ -51,9 +49,7 @@ def lambda_handler(event, context):
     try:
         if not created_by:
             return bad_request_response("Missing mandatory fields: created_by")
-        response = insert_order_values(
-            created_by
-        )
+        response = insert_order_values(created_by)
 
         if response["numberOfRecordsUpdated"]:
             return ok_response("Order initiated successfully!")

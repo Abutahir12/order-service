@@ -17,7 +17,7 @@ CREATE TABLE approval_groups (
 -- Creating order table
 CREATE TABLE orders (
     order_id VARCHAR(36) PRIMARY KEY,
-    order_status VARCHAR(255) NOT NULL,
+    order_status INT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_by VARCHAR(36) NOT NULL
     updated_at TIMESTAMP,

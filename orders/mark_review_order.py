@@ -1,7 +1,6 @@
 import boto3
-import json
 import os
-import uuid
+from datetime import datetime
 
 from dotenv import load_dotenv
 from utils.http_methods import (
@@ -9,6 +8,7 @@ from utils.http_methods import (
     bad_request_response,
     internal_server_error_response,
 )
+from utils.constants import ORDER_STATUS
 
 load_dotenv()
 
@@ -19,18 +19,19 @@ RESOURCE_ARN = os.getenv("RESOURCE_ARN")
 rds_data = boto3.client("rds-data")
 
 
-def insert_user_values(username, first_name, last_name=None, approval_group_id=None):
+def mark_order_under_review(created_by, order_id):
     # Replace these with your own RDS Data API configuration
     database = DB_NAME
     secret_arn = SECRET_ARN
     resource_arn = RESOURCE_ARN
 
-    new_user_id = uuid.uuid4()
     # Construct the SQL statement
     sql_statement = (
-        "INSERT INTO users (id, username, first_name, last_name, approval_group_id) "
-        f"VALUES ('{new_user_id}', '{username}', '{first_name}', '{last_name}', {approval_group_id})"
+        f"UPDATE orders set order_status = {ORDER_STATUS['UNDER_REVIEW']}, updated_at='{datetime.utcnow()}' "
+        f"where created_by = '{created_by}' and order_id = '{order_id}'"
     )
+
+    print(sql_statement)
 
     return rds_data.execute_statement(
         secretArn=secret_arn,
@@ -43,21 +44,14 @@ def insert_user_values(username, first_name, last_name=None, approval_group_id=N
 def lambda_handler(event, context):
     print("Input to lambda", event, type(event["body"]))
     body = event["body"]
-    username = body["username"]
-    first_name = body["first_name"]
-    last_name = body["last_name"]
-    approval_group_id = body["approval_group_id"]
-
+    created_by = body["created_by"]
+    order_id = body["order_id"]
     try:
-        if not len(username) or not len(first_name):
-            return bad_request_response("Missing mandatory fields: username/first_name")
-        response = insert_user_values(
-            username, first_name, last_name, approval_group_id
-        )
+        if not created_by:
+            return bad_request_response("Missing mandatory fields: created_by/order_id")
+        response = mark_order_under_review(created_by, order_id)
 
         if response["numberOfRecordsUpdated"]:
-            return ok_response("User created successfully!")
+            return ok_response("Order Marked Under Review")
     except Exception as e:
-        if "duplicate key value" in str(e):
-            return bad_request_response("Username already exists")
         return internal_server_error_response(str(e))

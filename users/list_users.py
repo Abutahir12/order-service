@@ -6,11 +6,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DB_NAME=os.getenv("DB_NAME")
-SECRET_ARN=os.getenv("SECRET_ARN")
-RESOURCE_ARN=os.getenv("RESOURCE_ARN")
+DB_NAME = os.getenv("DB_NAME")
+SECRET_ARN = os.getenv("SECRET_ARN")
+RESOURCE_ARN = os.getenv("RESOURCE_ARN")
 
 rds_data = boto3.client("rds-data")
+
 
 def list_users():
     # Replace these with your own RDS Data API configuration
@@ -31,7 +32,7 @@ def list_users():
         )
 
         records = response["records"]
-        
+
         return [
             {
                 "username": record[0]["stringValue"],
@@ -48,5 +49,5 @@ def list_users():
 
 
 def lambda_handler(event, context):
-    response= list_users()
+    response = list_users()
     return ok_response(response)

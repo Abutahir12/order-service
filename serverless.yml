@@ -83,3 +83,39 @@ functions:
           response:
             headers:
               Access-Control-Allow-Origin: "'*'"          
+
+  mark_under_review:
+    handler: orders.mark_review_order.lambda_handler
+    events:
+      - http:
+          path: /orders/review
+          method: PUT
+          cors: true
+          integration: lambda
+          request:
+            passThrough: WHEN_NO_MATCH
+            template:
+              application/json: '{
+                "body": $input.json("$")
+              }'
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"  
+
+  order_approval:
+    handler: orders.approve_reject.lambda_handler
+    events:
+      - http:
+          path: /orders
+          method: PUT
+          cors: true
+          integration: lambda
+          request:
+            passThrough: WHEN_NO_MATCH
+            template:
+              application/json: '{
+                "body": $input.json("$")
+              }'
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'" 
