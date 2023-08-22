@@ -1,0 +1,8 @@
+{
+    "body": {
+        "username": "JOHN",
+        "first_name": "John",
+        "last_name": "Doe",
+        "approval_group_id": 1
+    }
+}

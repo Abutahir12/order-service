@@ -1,0 +1,27 @@
+- Effect: Allow
+  Action:
+    - logs:CreateLogStream
+    - logs:CreateLogGroup
+    - logs:PutLogEvents
+  Resource: "*"
+- Effect: Allow
+  Action:
+    - secretsmanager:GetSecretValue
+    - secretsmanager:PutResourcePolicy
+    - secretsmanager:PutSecretValue
+    - secretsmanager:DescribeSecret
+    - secretsmanager:TagResource
+  Resource: "*"
+- Effect: Allow
+  Action:
+    - rds-data:BatchExecuteStatement
+    - rds-data:BeginTransaction
+    - rds-data:CommitTransaction
+    - rds-data:ExecuteStatement
+    - rds-data:RollbackTransaction
+    - rds-data:ExecuteSql
+  Resource: ${self:custom.RESOURCE_ARN}
+- Effect: "Allow"
+  Action:
+    - "lambda:*"
+  Resource: "*"

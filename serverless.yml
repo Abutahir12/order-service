@@ -1,11 +1,67 @@
 service: order-service
-
-frameworkVersion: '3'
+useDotenv: true
 
 provider:
   name: aws
   runtime: python3.9
+  deploymentMethod: direct
+  stage: ${opt:stage, "dev"}
+  region: ${opt:region, "ap-south-1"} # Mumbai as the default region
+  memorySize: 1024
+  iam:
+    role:
+      statements: ${file(./resources/lambda/role.yml)}
+  environment:
+    RESOURCE_ARN: ${self:custom.RESOURCE_ARN}  
+    DB_NAME: ${self:custom.DB_NAME}  
+    SECRET_ARN: ${self:custom.SECRET_ARN}  
+
+custom:
+  RESOURCE_ARN: <ADD YOUR DETAILS>
+  DB_NAME: <ADD YOUR DETAILS>
+  SECRET_ARN: <ADD YOUR DETAILS>
+
+plugins:
+  - serverless-python-requirements  
+
+package:
+  individually: true
+  patterns:
+    - "!node_modules/**"
+    - "!requirements.txt"
+    - "!package.json"  
 
 functions:
   create_user:
     handler: users.create_user.lambda_handler
+    events:
+      - http:
+          path: /users
+          method: POST
+          cors: true
+          integration: lambda
+          request:
+            passThrough: WHEN_NO_MATCH
+            template:
+              application/json: '{
+                "body": $input.json("$")
+              }'
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+
+  list_users:      
+    handler: users.list_users.lambda_handler
+    events:
+      - http:
+          path: /users/list
+          method: GET
+          cors: true        
+
+  list_groups:
+    handler: groups.list_groups.lambda_handler
+    events:
+      - http:
+          path: /approval/groups
+          method: GET
+          cors: true
