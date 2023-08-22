@@ -1,0 +1,11 @@
+service: order-service
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.9
+
+functions:
+  create_user:
+    handler: users.create_user.lambda_handler
